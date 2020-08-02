@@ -1,0 +1,23 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+        nodejs: 10
+  pre_build:
+    commands:
+    - npm install -g newman
+  build:
+    commands:
+      - npm install
+      - export BUCKET=cicd-test-acloudguru
+      - aws cloudformation package --template-file template.yml --s3-bucket test-for-build --output-template-file outputtemplate.yaml
+  post_build:
+    commands:
+        - newman run test/cicd-acg-test.postman_collection.json -r json,cli --reporter-json-export report.json
+artifacts:
+  type: zip
+  files:
+    - report.json
+    - template.yml
+    - outputtemplate.yaml
+    
