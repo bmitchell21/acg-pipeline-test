@@ -1,8 +1,16 @@
 import boto3
+import json
 
 def handler(event, context):
     response = "Hi, my name is Brooke."
-    return response
+    return {
+        'statusCode': 200,
+        'headers': {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        },
+        'body': json.dumps(response)
+        }
     
     
     
